@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Octokit" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="CommunityToolkit.Mvvm.ComponentModel" />
+    <Using Include="PluginsRepository.Core.Components" />
+    <Using Include="PluginsRepository.Core.Generics" />
+    <Using Include="PluginsRepository.Core.Models" />
+  </ItemGroup>
+
+</Project>

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginsRepository", "PluginsRepository\PluginsRepository.csproj", "{A4C92BF9-29FB-4535-9EA1-C436111AC3D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginsRepository", "PluginsRepository\PluginsRepository.csproj", "{A4C92BF9-29FB-4535-9EA1-C436111AC3D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginsRepository.Core", "PluginsLibrary.Core\PluginsRepository.Core.csproj", "{3721F3E2-DCAA-40C8-A610-25F9B9A2C6F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A4C92BF9-29FB-4535-9EA1-C436111AC3D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4C92BF9-29FB-4535-9EA1-C436111AC3D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4C92BF9-29FB-4535-9EA1-C436111AC3D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3721F3E2-DCAA-40C8-A610-25F9B9A2C6F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3721F3E2-DCAA-40C8-A610-25F9B9A2C6F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3721F3E2-DCAA-40C8-A610-25F9B9A2C6F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3721F3E2-DCAA-40C8-A610-25F9B9A2C6F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
