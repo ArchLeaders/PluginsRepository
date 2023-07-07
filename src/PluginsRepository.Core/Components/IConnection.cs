@@ -2,5 +2,6 @@
 
 public interface IConnection
 {
-    Dictionary<Guid, T> GetResource<T>() where T : TableItem<T>;
+    Task<Dictionary<Guid, T>> LoadResource<T>() where T : TableItem<T>;
+    Task SaveResource<T>(Dictionary<Guid, T> payload) where T : TableItem<T>;
 }

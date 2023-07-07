@@ -1,23 +1,38 @@
 ﻿using Octokit;
+using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace PluginsRepository.Core.Components;
 
 public class OctokitConnection : IConnection
 {
-    private readonly HttpClient _client = new();
     private readonly GitHubClient _githubClient = new(new ProductHeaderValue("public-plugins-repository"));
 
     private const string Organization = "ArchLeaders";
     private const string Repository = "PluginsRepository";
+    private const string DataRoot = "data";
 
-    /// <summary>
-    /// Looks 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Dictionary<Guid, T> GetResource<T>() where T : TableItem<T>
+    public async Task<Dictionary<Guid, T>> LoadResource<T>() where T : TableItem<T>
     {
-        throw new NotImplementedException();
+        byte[] buffer = await _githubClient.Repository.Content
+            .GetRawContent(Organization, Repository, Path.Combine(DataRoot, $"{typeof(T).Name}Table.json"));
+        return JsonSerializer.Deserialize<Dictionary<Guid, T>>(buffer)
+            ?? throw new InvalidDataException($"Could not parse '{typeof(T).Name}Table': the deserializer returned null");
+    }
+
+    public async Task SaveResource<T>(Dictionary<Guid, T> payload) where T : TableItem<T>
+    {
+        string tableName = $"{typeof(T).Name}Table.json";
+        byte[] buffer = JsonSerializer.SerializeToUtf8Bytes(payload);
+
+        await _githubClient.Repository.Content.UpdateFile(
+            Organization,
+            Repository,
+            Path.Combine(DataRoot, tableName),
+            new UpdateFileRequest($"[`System`] Update {tableName}", Convert.ToBase64String(buffer), Convert.ToHexString(SHA512.HashData(buffer))) {
+                Committer = new Committer("System", string.Empty, DateTimeOffset.UtcNow),
+                Branch = "master"
+            }
+        );
     }
 }
