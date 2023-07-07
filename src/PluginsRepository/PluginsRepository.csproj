@@ -21,6 +21,7 @@
     <Using Include="PluginsRepository" />
     <Using Include="PluginsRepository.Core.Components" />
     <Using Include="PluginsRepository.Core.Generics" />
+    <Using Include="PluginsRepository.Core.Models" />
   </ItemGroup>
 
 </Project>
