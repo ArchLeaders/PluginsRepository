@@ -1,7 +1,27 @@
-﻿@page "/"
+﻿@page "/";
+@inject ITable<Plugin> plugins;
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<button class="btn btn-primary" @onclick="RunSample">
+    Run Sample
+</button>
+
+@code {
+    private async Task RunSample()
+    {
+        await plugins.Load();
+        await plugins.Add(new Plugin {
+            Name = "EAD Library",
+            Description = "Handles common EAD formats such as byaml, sarc and syaz0",
+            AssemblyName = "NxEditor.CeadPlugin",
+            Organization = "NX-Editor",
+            Repository = "NxEditor.CeadPlugin",
+            AuthorId = 80713508
+        });
+
+        await plugins.Save();
+    }
+}
