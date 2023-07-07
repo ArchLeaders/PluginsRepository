@@ -14,8 +14,9 @@ public class OctokitConnection : IConnection
 
     public async Task<Dictionary<Guid, T>> LoadResource<T>() where T : TableItem<T>
     {
+        string tableName = $"{typeof(T).Name}Table.json";
         byte[] buffer = await _githubClient.Repository.Content
-            .GetRawContent(Organization, Repository, Path.Combine(DataRoot, $"{typeof(T).Name}Table.json"));
+            .GetRawContent(Organization, Repository, $"{DataRoot}/{tableName}");
         return JsonSerializer.Deserialize<Dictionary<Guid, T>>(buffer)
             ?? throw new InvalidDataException($"Could not parse '{typeof(T).Name}Table': the deserializer returned null");
     }
@@ -26,9 +27,7 @@ public class OctokitConnection : IConnection
         byte[] buffer = JsonSerializer.SerializeToUtf8Bytes(payload);
 
         await _githubClient.Repository.Content.UpdateFile(
-            Organization,
-            Repository,
-            Path.Combine(DataRoot, tableName),
+            Organization, Repository, $"{DataRoot}/{tableName}",
             new UpdateFileRequest($"[`System`] Update {tableName}", Convert.ToBase64String(buffer), Convert.ToHexString(SHA512.HashData(buffer))) {
                 Committer = new Committer("System", string.Empty, DateTimeOffset.UtcNow),
                 Branch = "master"
