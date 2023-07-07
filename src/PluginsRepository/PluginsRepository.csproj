@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PluginsLibrary.Core\PluginsRepository.Core.csproj" />
+    <ProjectReference Include="..\PluginsRepository.Core\PluginsRepository.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
