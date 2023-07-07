@@ -1,56 +1,63 @@
-﻿using System.Text.Json;
-
-namespace PluginsRepository.Core.Generics;
+﻿namespace PluginsRepository.Core.Generics;
 
 public class Table<T> : ITable<T> where T : TableItem<T>
 {
-    private readonly Dictionary<Guid, T> _cache;
+    private readonly IConnection _connection;
+    private Dictionary<Guid, T>? _cache;
+
+    public Dictionary<Guid, T> Cache => _cache
+        ?? throw new InvalidOperationException($"{nameof(Cache)} returned null. Call ITable<T>.Load() to load the cache asynchronously");
 
     public Table(IConnection connection)
     {
-        _cache = connection.GetResource<T>();
+        _connection = connection;
+    }
+
+    public async Task Load()
+    {
+        _cache ??= await _connection.LoadResource<T>();
+    }
+
+    public async Task Save()
+    {
+        await _connection.SaveResource(Cache);
     }
 
     public async Task<IEnumerable<T>> GetAll()
     {
         return await Task.FromResult(
-            _cache.Values.AsEnumerable());
+            Cache.Values.AsEnumerable());
     }
 
     public async Task<IEnumerable<T>> GetAll(Func<T, bool> filter)
     {
         return await Task.FromResult(
-            _cache.Values.Where(filter));
+            Cache.Values.Where(filter));
     }
 
     public async Task<T?> Get(Func<T, bool> filter)
     {
         return await Task.FromResult(
-            _cache.Values.Where(filter).FirstOrDefault());
+            Cache.Values.Where(filter).FirstOrDefault());
     }
 
     public async Task Add(T item)
     {
         await Task.Run(() => {
-            _cache.Add(item.Id, item);
+            Cache.Add(item.Id, item);
         });
     }
 
     public async Task Update(T item)
     {
         await Task.Run(() => {
-            _cache[item.Id] = item;
+            Cache[item.Id] = item;
         });
     }
 
     public async Task<bool> Remove(T item)
     {
         return await Task.FromResult(
-            _cache.Remove(item.Id));
-    }
-
-    public async Task Serialize(Stream output)
-    {
-        await JsonSerializer.SerializeAsync(output, _cache);
+            Cache.Remove(item.Id));
     }
 }
